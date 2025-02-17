@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthChangeDelay: 0.5
+  damageClip: {fileID: 8300000, guid: a232b41598c0a1f479d05415fae81897, type: 3}
 --- !u!114 &3457766485122280924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,5 +302,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterRenderer: {fileID: 8056749493951733414}
   weaponPivot: {fileID: 518565711661997520}
-  weaponPrefab: {fileID: 0}
+  weaponPrefab: {fileID: 8695087987589480210, guid: b22d51dd317eb6141857249c2b16c775, type: 3}
   followRange: 15

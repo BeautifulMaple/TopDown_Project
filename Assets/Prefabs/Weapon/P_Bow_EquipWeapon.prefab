@@ -51,6 +51,7 @@ MonoBehaviour:
   power: 1
   speed: 10
   attackRange: 10
+  attackSoundClip: {fileID: 8300000, guid: 0cd670b81b36b66428d185f2a17cf4d1, type: 3}
   target:
     serializedVersion: 2
     m_Bits: 128
