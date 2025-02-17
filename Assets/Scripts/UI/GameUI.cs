@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,8 +7,8 @@ using UnityEngine.UI;
 
 public class GameUI : BaseUI
 {
-    [SerializeField] private TextMeshProUGUI waveText;
-    [SerializeField] private Slider hpSlider;
+    [SerializeField] public TextMeshProUGUI waveText;
+    [SerializeField] public Slider hpSlider;
 
     private void Start()
     {
