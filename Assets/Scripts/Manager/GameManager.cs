@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;
     public static bool isFirstLoading = true;
 
+    private CameraShake cameraShake;
+
     private void Awake()
     {
         instance = this;
@@ -27,6 +29,14 @@ public class GameManager : MonoBehaviour
 
         enemyManager = GetComponentInChildren<EnemyManager>();
         enemyManager.Init(this);
+
+        cameraShake = FindObjectOfType<CameraShake>();  // CameraShake 컴포넌트를 찾아서 할당
+        MainCameraShake();
+    }
+
+    public void MainCameraShake()
+    {
+        cameraShake.ShakeCamera(0.1f, 1f, 1f);
     }
 
     private void Start()
