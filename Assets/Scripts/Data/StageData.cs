@@ -45,7 +45,7 @@ public class MonsterSpawnData
 
 public static class StageData
 {
-    public static readonly StageInfo[] stages = new StageInfo[]
+    public static readonly StageInfo[] Stages = new StageInfo[]
     {
         // 스테이지 생성하기
         new StageInfo(0, new WaveData[] 

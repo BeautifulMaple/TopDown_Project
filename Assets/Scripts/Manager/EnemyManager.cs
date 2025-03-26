@@ -1,22 +1,18 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
     private Coroutine waveRoutine;
 
-    [SerializeField] private List<GameObject> enemyPrefabs; // 생성할 적 프리팹 리스트
+    [SerializeField] private List<GameObject> enemyPrefabs;
+
     private Dictionary<string, GameObject> enemyPrefabDic;
-    [SerializeField]
-    private List<Rect> spawnAreas; // 적을 생성할 영역 리스트
 
-    [SerializeField]
-    private Color gizmoColor = new Color(1, 0, 0, 0.3f); // 기즈모 색상
-
-    private List<EnemyController> activeEnemies = new List<EnemyController>(); // 현재 활성화된 적들
+    [SerializeField] List<Rect> spawnAreas;
+    [SerializeField] private Color gizmoColor = new Color(1, 0, 0, .3f);
+    private List<EnemyController> activeEnemies = new List<EnemyController>();
 
     private bool enemySpawnComplite;
 
@@ -53,11 +49,12 @@ public class EnemyManager : MonoBehaviour
     {
         StopAllCoroutines();
     }
-    // 코루틴 : 실행을 중단하고 나중에 다시 실행을 재개 Thead랑 비슷 ?
+
     private IEnumerator SpawnWave(int waveCount)
     {
         enemySpawnComplite = false;
         yield return new WaitForSeconds(timeBetweenWaves);
+
         for (int i = 0; i < waveCount; i++)
         {
             yield return new WaitForSeconds(timeBetweenSpawns);
@@ -67,7 +64,7 @@ public class EnemyManager : MonoBehaviour
         enemySpawnComplite = true;
     }
 
-    private void SpawnRandomEnemy(string prefabName = null) // 기존의 코드가 오류가 날 수 있으니 기본 값 null
+    private void SpawnRandomEnemy(string prefabName = null)
     {
         if (enemyPrefabs.Count == 0 || spawnAreas.Count == 0)
         {
@@ -75,9 +72,8 @@ public class EnemyManager : MonoBehaviour
             return;
         }
 
-        // 랜덤한 적 프리팹 선택
         GameObject randomPrefab;
-        if (prefabName == null)  // 기존 코드 살리기
+        if (prefabName == null)
         {
             randomPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
         }
@@ -86,24 +82,20 @@ public class EnemyManager : MonoBehaviour
             randomPrefab = enemyPrefabDic[prefabName];
         }
 
-        // 랜덤한 영역 선택
+
         Rect randomArea = spawnAreas[Random.Range(0, spawnAreas.Count)];
 
-        // Rect 영역 내부의 랜덤 위치 계산
         Vector2 randomPosition = new Vector2(
             Random.Range(randomArea.xMin, randomArea.xMax),
-            Random.Range(randomArea.yMin, randomArea.yMax)
-        );
+            Random.Range(randomArea.yMin, randomArea.yMax));
 
-        // 적 생성 및 리스트에 추가
-        GameObject spawnedEnemy = Instantiate(randomPrefab, new Vector3(randomPosition.x, randomPosition.y), Quaternion.identity);
-        EnemyController enemyController = spawnedEnemy.GetComponent<EnemyController>();
+        GameObject spawnEnemy = Instantiate(randomPrefab, new Vector3(randomPosition.x, randomPosition.y), Quaternion.identity);
+        EnemyController enemyController = spawnEnemy.GetComponent<EnemyController>();
         enemyController.Init(this, gameManager.player.transform);
 
         activeEnemies.Add(enemyController);
     }
 
-    // 기즈모를 그려 영역을 시각화 (선택된 경우에만 표시)
     private void OnDrawGizmosSelected()
     {
         if (spawnAreas == null) return;
@@ -113,6 +105,7 @@ public class EnemyManager : MonoBehaviour
         {
             Vector3 center = new Vector3(area.x + area.width / 2, area.y + area.height / 2);
             Vector3 size = new Vector3(area.width, area.height);
+
             Gizmos.DrawCube(center, size);
         }
     }
@@ -124,21 +117,24 @@ public class EnemyManager : MonoBehaviour
             gameManager.EndOfWave();
     }
 
-    public void StartStage(WaveData waveData)
+    public void StartStage(StageInstance stageInstance)
     {
-        if (waveRoutine != null) StopCoroutine(waveRoutine);
+        if (waveRoutine != null)
+            StopCoroutine(waveRoutine);
 
-        waveRoutine = StartCoroutine(SpawnStarat(waveData));
+        waveRoutine = StartCoroutine(SpawnStart(stageInstance));
     }
 
-    private IEnumerator SpawnStarat(WaveData waveData)
+    private IEnumerator SpawnStart(StageInstance stageInstance)
     {
         enemySpawnComplite = false;
         yield return new WaitForSeconds(timeBetweenWaves);
 
+        WaveData waveData = stageInstance.currentStageInfo.waves[stageInstance.currentWave];
+
         for (int i = 0; i < waveData.monsters.Length; i++)
         {
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return new WaitForSeconds(timeBetweenSpawns);
 
             MonsterSpawnData monsterSpawnData = waveData.monsters[i];
             for (int j = 0; j < monsterSpawnData.spawnCount; j++)
@@ -149,7 +145,7 @@ public class EnemyManager : MonoBehaviour
 
         if (waveData.hasBoss)
         {
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return new WaitForSeconds(timeBetweenSpawns);
 
             gameManager.MainCameraShake();
             SpawnRandomEnemy(waveData.bossType);
