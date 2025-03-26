@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageData : MonoBehaviour
+[System.Serializable]
+public class StageInfo
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int stageKey;
+    public WaveData[] waves;
 
-    // Update is called once per frame
-    void Update()
+    public StageInfo(int stageKey, WaveData[] waves)
     {
-        
+        this.stageKey = stageKey;
+        this.waves = waves;
     }
+}
+
+[System.Serializable]
+public class WaveData
+{
+
 }
