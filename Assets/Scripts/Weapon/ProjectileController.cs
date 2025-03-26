@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : MonoBehaviour, IPoolable
 {
     [SerializeField] private LayerMask levelCollisionLayer;
 
     private RangeWeaponHandler rangeWeaponHandler;
 
-    private float currentDuration;  // 시간초과 체크
+    private float currentDuration;
     private Vector2 direction;
     private bool isReady;
     private Transform pivot;
@@ -16,9 +17,11 @@ public class ProjectileController : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private SpriteRenderer spriteRenderer;
 
-    public bool fxOnDestory = true;
+    public bool fxOnDestroy = true;
 
     ProjectileManager projectileManager;
+
+    private Action<GameObject> returnToPool;
 
     private void Awake()
     {
@@ -29,10 +32,7 @@ public class ProjectileController : MonoBehaviour
 
     private void Update()
     {
-        if (!isReady)
-        {
-            return;
-        }
+        if (!isReady) return;
 
         currentDuration += Time.deltaTime;
 
@@ -48,7 +48,7 @@ public class ProjectileController : MonoBehaviour
     {
         if (levelCollisionLayer.value == (levelCollisionLayer.value | (1 << collision.gameObject.layer)))
         {
-            DestroyProjectile(collision.ClosestPoint(transform.position) - direction * .2f, fxOnDestory);
+            DestroyProjectile(collision.ClosestPoint(transform.position) - direction * .2f, fxOnDestroy);
         }
         else if (rangeWeaponHandler.target.value == (rangeWeaponHandler.target.value | (1 << collision.gameObject.layer)))
         {
@@ -66,10 +66,11 @@ public class ProjectileController : MonoBehaviour
                 }
             }
 
-            DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestory);
+
+
+            DestroyProjectile(collision.ClosestPoint(transform.position), fxOnDestroy);
         }
     }
-
 
     public void Init(Vector2 direction, RangeWeaponHandler weaponHandler, ProjectileManager projectileManager)
     {
@@ -84,7 +85,7 @@ public class ProjectileController : MonoBehaviour
 
         transform.right = this.direction;
 
-        if (this.direction.x < 0)
+        if (direction.x < 0)
             pivot.localRotation = Quaternion.Euler(180, 0, 0);
         else
             pivot.localRotation = Quaternion.Euler(0, 0, 0);
@@ -94,12 +95,27 @@ public class ProjectileController : MonoBehaviour
 
     private void DestroyProjectile(Vector3 position, bool createFx)
     {
-        if(createFx)
+        if (createFx)
         {
-            projectileManager.CreateImpactParticlesAtPostion(position, rangeWeaponHandler);
+            projectileManager.CreateImpactParticlesAtPosition(position, rangeWeaponHandler);
         }
 
-        Destroy(this.gameObject);
+        // Destroy(this.gameObject);
+        OnDespawn();
+    }
+
+    public void Initialize(Action<GameObject> returnAction)
+    {
+        returnToPool = returnAction;
+    }
+
+    public void OnSpawn()
+    {
+
+    }
+
+    public void OnDespawn()
+    {
+        returnToPool?.Invoke(gameObject);
     }
 }
-

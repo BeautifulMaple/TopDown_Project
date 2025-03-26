@@ -12462,6 +12462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1213375133}
   - component: {fileID: 1213375134}
+  - component: {fileID: 1213375135}
   m_Layer: 0
   m_Name: ProjectileManager
   m_TagString: Untagged
@@ -12501,6 +12502,21 @@ MonoBehaviour:
   - {fileID: 2194332321017134702, guid: 415192507f704704788006faec2e4134, type: 3}
   - {fileID: 6803940628956150934, guid: a3ce36ef25bb00e42be8e4bad37ede65, type: 3}
   impactParticleSystem: {fileID: 1237579999}
+--- !u!114 &1213375135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213375132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4cb97fbb8334854fbe08d39b60e8ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 2194332321017134702, guid: 415192507f704704788006faec2e4134, type: 3}
+  - {fileID: 6803940628956150934, guid: a3ce36ef25bb00e42be8e4bad37ede65, type: 3}
 --- !u!1 &1237579996
 GameObject:
   m_ObjectHideFlags: 0
@@ -20404,8 +20420,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0
-  m_FrequencyGain: 0
+  m_AmplitudeGain: 1
+  m_FrequencyGain: 1
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &1985794143
 GameObject:
