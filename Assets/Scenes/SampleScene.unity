@@ -5459,6 +5459,9 @@ MonoBehaviour:
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.3}
   timeBetweenSpawns: 0.2
   timeBetweenWaves: 1
+  itemPrefabs:
+  - {fileID: 2504815665166703810, guid: 7232683ab9de4bb44915626ccde18267, type: 3}
+  - {fileID: 5966323500617935350, guid: 13bd00721d5b6714f9592a2d8a23ab3b, type: 3}
 --- !u!1 &351940204
 GameObject:
   m_ObjectHideFlags: 0

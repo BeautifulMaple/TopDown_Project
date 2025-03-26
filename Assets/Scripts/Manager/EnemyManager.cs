@@ -19,6 +19,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private float timeBetweenSpawns = 0.2f;
     [SerializeField] private float timeBetweenWaves = 1f;
 
+    [SerializeField] private List<GameObject> itemPrefabs;
+
     GameManager gameManager;
 
     public void Init(GameManager gameManager)
@@ -113,8 +115,16 @@ public class EnemyManager : MonoBehaviour
     public void RemoveEnemyOnDeath(EnemyController enemy)
     {
         activeEnemies.Remove(enemy);
+
+        CreateRandomItem(enemy.transform.position);
+
         if (enemySpawnComplite && activeEnemies.Count == 0)
             gameManager.EndOfWave();
+    }
+
+    private void CreateRandomItem(Vector3 position)
+    {
+        GameObject item = Instantiate(itemPrefabs[Random.Range(0, itemPrefabs.Count)], position, Quaternion.identity);
     }
 
     public void StartStage(StageInstance stageInstance)

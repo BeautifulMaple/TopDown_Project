@@ -33,10 +33,29 @@ public class PlayerController : BaseController
 
         isAttacking = Input.GetMouseButton(0);
     }
-
     public override void Death()
     {
         base.Death();
         gameManager.GameOver();
+    }
+
+    public void UseItem(ItemData item)
+    {
+        foreach (StatEntry modifier in item.statModifiers)
+        {
+            statHandler.ModifyStat(modifier.statType, modifier.baseValue, !item.isTemporary, item.duration);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent<ItemHandler>(out ItemHandler handler))
+        {
+            if (handler.ItemData == null)
+                return;
+
+            UseItem(handler.ItemData);
+            Destroy(handler.gameObject);
+        }
     }
 }
