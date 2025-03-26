@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerController player { get; private set; }
     private ResourceController _playerResourceController;
-
+    [SerializeField] private int currentStageIndex = 0;
     [SerializeField] private int currentWaveIndex = 0;
 
     private EnemyManager enemyManager;
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     public void MainCameraShake()
     {
-        cameraShake.ShakeCamera(0.1f, 1f, 1f);
+        cameraShake.ShakeCamera(1f, 1f, 1f);
     }
 
     private void Start()
@@ -54,7 +56,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         uiManager.SetPlayGame();
-        StartNextWave();
+        //StartNextWave();
+        StartStage();
     }
 
     void StartNextWave()
@@ -66,12 +69,54 @@ public class GameManager : MonoBehaviour
 
     public void EndOfWave()
     {
-        StartNextWave();
+        //StartNextWave();
+        StartNextWaveInStage();
     }
 
     public void GameOver()
     {
         enemyManager.StopWave();
         uiManager.SetGameOver();
+    }
+
+    public void StartStage()
+    {
+        StageInfo stageInfo = GetStageInfo(currentStageIndex);
+        if (stageInfo == null)
+        {
+            Debug.Log("스테이지 정보가 없습니다.");
+            return;
+        }
+        uiManager.ChangeWave(currentStageIndex + 1);
+        enemyManager.StartStage(stageInfo.waves[currentWaveIndex]);
+    }
+    public void StartNextWaveInStage()
+    {
+        StageInfo stageInfo = GetStageInfo(currentWaveIndex);
+        if (stageInfo.waves.Length - 1 > currentWaveIndex)
+        {
+            currentWaveIndex++;
+            StartStage();
+        }
+        else
+        {
+            CompleteStage();
+        }
+    }
+
+    private void CompleteStage()
+    {
+        currentStageIndex++;
+        currentWaveIndex = 0;
+        StartStage();
+    }
+
+    private StageInfo GetStageInfo(int stageKey)
+    {
+        foreach (var stage in StageData.stages)
+        {
+            if (stage.stageKey == stageKey) return stage;
+        }
+        return null;
     }
 }

@@ -18,5 +18,76 @@ public class StageInfo
 [System.Serializable]
 public class WaveData
 {
+    public MonsterSpawnData[] monsters;
+    public bool hasBoss;    // 보스가 있는지
+    public string bossType; // 보스 타입
 
+    public WaveData(MonsterSpawnData[] mansters, bool hasBoss, string bossType)
+    {
+        this.monsters = mansters;
+        this.hasBoss = hasBoss;
+        this.bossType = bossType;
+    }
+}
+
+[System.Serializable]
+public class MonsterSpawnData
+{
+    public string monsterType;
+    public int spawnCount;
+
+    public MonsterSpawnData(string monsterType, int spawnCount)
+    {
+        this.monsterType = monsterType;
+        this.spawnCount = spawnCount;
+    }
+}
+
+public static class StageData
+{
+    public static readonly StageInfo[] stages = new StageInfo[]
+    {
+        // 스테이지 생성하기
+        new StageInfo(0, new WaveData[] 
+        {
+            new WaveData(new MonsterSpawnData[] 
+            {
+                new MonsterSpawnData("Goblin", 1),
+            }
+            , false, ""),
+            new WaveData(new MonsterSpawnData[]
+            {
+                new MonsterSpawnData("Goblin", 3),
+            }
+            , false, ""),
+            new WaveData(new MonsterSpawnData[]
+            {
+                new MonsterSpawnData("Goblin", 2),
+                new MonsterSpawnData("Goblin", 2),
+                new MonsterSpawnData("Goblin", 2),
+            }
+            , true, "Orc_Shaman"),
+        }),
+        new StageInfo(1, new WaveData[] 
+        {
+            new WaveData(new MonsterSpawnData[]
+            {
+                new MonsterSpawnData("Goblin", 5),
+            }
+            , false, ""),
+            new WaveData(new MonsterSpawnData[]
+            {
+                new MonsterSpawnData("Goblin", 10),
+            }
+            , false, ""),
+            new WaveData(new MonsterSpawnData[]
+            {
+                new MonsterSpawnData("Goblin",10),
+                new MonsterSpawnData("Goblin",10),
+                new MonsterSpawnData("Goblin",10),
+            }
+            ,true,"Orc_Shaman"),
+
+        }),
+    };
 }
