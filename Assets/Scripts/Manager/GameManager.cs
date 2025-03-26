@@ -33,12 +33,7 @@ public class GameManager : MonoBehaviour
         enemyManager.Init(this);
 
         cameraShake = FindObjectOfType<CameraShake>();  // CameraShake 컴포넌트를 찾아서 할당
-        MainCameraShake();
-    }
-
-    public void MainCameraShake()
-    {
-        cameraShake.ShakeCamera(1f, 1f, 1f);
+        //MainCameraShake();
     }
 
     private void Start()
@@ -51,6 +46,12 @@ public class GameManager : MonoBehaviour
         {
             isFirstLoading = false;
         }
+        MainCameraShake();
+    }
+
+    public void MainCameraShake()
+    {
+        cameraShake.ShakeCamera(1f, 1f, 1f);
     }
 
     public void StartGame()
